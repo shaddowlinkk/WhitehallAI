@@ -21,7 +21,7 @@ public class board extends JPanel{
     private int type;
     private int mode = 1;
     private boolean imported = false;
-    private int selectedi,selectedo;
+    private int selected;
     private int[] conections;
 
     public board(JFrame f) {
@@ -39,16 +39,19 @@ public class board extends JPanel{
                     for (int i =1;i<=pointsi.size();i++){
                         if(e.getX()-8<=pointsi.get(i-1).x&&e.getX()-8>=pointsi.get(i-1).x-11){
                             if(e.getY()-30<=pointsi.get(i-1).y&&e.getY()-30>=pointsi.get(i-1).y-11){
-                                selectedi=i;
+                                selected=i;
                                 repaint();
-                                System.out.println(i);
                             }
-
                         }
-
                     }
-                    System.out.println((e.getX()-8)+","+(e.getY()-30));
-
+                    for (int i =1;i<=pointso.size();i++) {
+                        if (e.getX() - 24 <= pointso.get(i - 1).x && e.getX() - 24 >= pointso.get(i - 1).x - 25) {
+                            if (e.getY() - 50 <= pointso.get(i - 1).y && e.getY() - 50 >= pointso.get(i - 1).y - 25) {
+                                selected = i + 174;
+                                repaint();
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -139,7 +142,7 @@ public class board extends JPanel{
         }
         g2.setColor(Color.blue);
         for (int i =1;i<=pointsi.size();i++) {
-            if (i == selectedi) {
+            if (i == selected) {
                 g2.setColor(Color.MAGENTA);
                 g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
                 g2.setColor(Color.blue);
@@ -149,7 +152,13 @@ public class board extends JPanel{
             }
         }
         for (int i =1;i<=pointso.size();i++){
-            g2.fillOval(pointso.get(i-1).x, pointso.get(i-1).y,25,25);
+            if(i == (selected-174)){
+                g2.setColor(Color.MAGENTA);
+                g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
+                g2.setColor(Color.blue);
+            }else {
+                g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
+            }
         }
     }
 }
