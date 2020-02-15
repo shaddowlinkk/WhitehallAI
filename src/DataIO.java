@@ -3,7 +3,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.*;
 
 public class DataIO {
-    private JSONArray data = new JSONArray();
+    private String data ="";
     public void DataIO(){
 
     }
@@ -13,12 +13,12 @@ public class DataIO {
         node.put("ID",id);
         node.put("Connections",conn);
         node.put("Type",type);
-        point.add(x-16);
-        point.add(y-34);
+        point.add(x);
+        point.add(y);
         node.put("Points",point);
-        data.add(node);
+        data= data+node.toJSONString()+"\n";
     }
-    public JSONArray getJson(){
+    public String getJson(){
         return data;
     }
 }

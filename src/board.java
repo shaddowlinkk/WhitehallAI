@@ -3,11 +3,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import javax.swing.*;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +22,7 @@ public class board extends JPanel{
 
     public board(JFrame f) {
         d = new DataIO();
-        type = 2;
+        type = 1;
         f.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -34,27 +34,33 @@ public class board extends JPanel{
         });
         f.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_1) {
                     if(type==1) {
                         pointso.add(new Point(x - 16, y - 34));
-                        int ID = Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID"));
-                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node Conections"));
-                        d.addData(ID, conn, type, x, y);
+                        int ID = pointso.size()+174;
+                        e.consume();
+                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+(pointso.size())+") Conections"));
+                        e.consume();
+                        d.addData(ID, conn, type, x-16, y-34);
                         repaint();
                     }
                     else {
                         pointsi.add(new Point(x - 8, y - 30));
-                        int ID = Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID"));
-                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node Conections"));
-                        d.addData(ID, conn, type, x, y);
+                        //Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID(next number:"+pointsi.size()+")"))
+
+                        int ID =pointsi.size();
+                        e.consume();
+                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+pointsi.size()+") Conections"));
+                        e.consume();
+                        d.addData(ID, conn, type, x-8, y-30);
                         repaint();
 
                     }
                 }
                 else if (e.getKeyCode()==KeyEvent.VK_2){
                     System.out.println(type);
-                    System.out.println(d.getJson().toJSONString());
+                    System.out.println(d.getJson());
                 }
                 else if(e.getKeyCode()==KeyEvent.VK_3){
                     type = type==1 ? 2:1;
@@ -62,19 +68,37 @@ public class board extends JPanel{
                 }else if (e.getKeyCode()==KeyEvent.VK_4){
                     System.out.println("Export data");
                     try(FileWriter file = new FileWriter("Data.json")){
-                        file.write(d.getJson().toJSONString());
+                        file.write(d.getJson());
                     }catch (IOException es){
                         System.out.println("Failed to Write");
                     }
                 }else if (e.getKeyCode()==KeyEvent.VK_5){
                     System.out.println("importing data");
-                    try(FileReader read = new FileReader("Data.jspn")){
-                        JSONParser parser = new JSONParser();
-                        JSONArray a = (JSONArray) parser.parse(read);
-                        //TODO add json data parser
+                    try{
+                        FileReader read = new FileReader("Data.json");
+                        BufferedReader bread = new BufferedReader(read);
+                        String line="";
+                        while ((line =bread.readLine())!= null) {
+                            JSONObject indata= (JSONObject) new JSONParser().parse(line);
+                            JSONArray inpoints = (JSONArray) indata.get("Points");
+                            int ID=(int)(long)indata.get("ID");
+                            int conn=(int)(long)indata.get("Connections");
+                            int type=(int)(long)indata.get("Type");
+                            int x=(int)(long)inpoints.get(0);
+                            int y=(int)(long)inpoints.get(1);
+                            d.addData(ID, conn, type, x, y);
+                            if(type==1){
+                                pointso.add(new Point(x,y));
+                            }else if(type==2){
+                                pointsi.add(new Point(x,y));
+                            }
+                        }
+                        bread.close();
+                        repaint();
                     }catch (Exception es){
-
+                        es.printStackTrace();
                     }
+                }else if (e.getKeyCode()==KeyEvent.VK_6){
                 }
             }
         });
