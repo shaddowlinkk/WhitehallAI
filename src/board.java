@@ -19,6 +19,10 @@ public class board extends JPanel{
     private ArrayList<Point> pointsi = new ArrayList<Point>();
     private DataIO d;
     private int type;
+    private int mode = 1;
+    private boolean imported = false;
+    private int selectedi,selectedo;
+    private int[] conections;
 
     public board(JFrame f) {
         d = new DataIO();
@@ -27,15 +31,31 @@ public class board extends JPanel{
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                x=e.getX();
-                y=e.getY();
-                repaint();
+                if(mode==1) {
+                    x = e.getX();
+                    y = e.getY();
+                    repaint();
+                }else{
+                    for (int i =1;i<=pointsi.size();i++){
+                        if(e.getX()-8<=pointsi.get(i-1).x&&e.getX()-8>=pointsi.get(i-1).x-11){
+                            if(e.getY()-30<=pointsi.get(i-1).y&&e.getY()-30>=pointsi.get(i-1).y-11){
+                                selectedi=i;
+                                repaint();
+                                System.out.println(i);
+                            }
+
+                        }
+
+                    }
+                    System.out.println((e.getX()-8)+","+(e.getY()-30));
+
+                }
             }
         });
         f.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_1) {
+                if(e.getKeyCode()==KeyEvent.VK_1&&mode==1) {
                     if(type==1) {
                         pointso.add(new Point(x - 16, y - 34));
                         int ID = pointso.size()+174;
@@ -58,21 +78,21 @@ public class board extends JPanel{
 
                     }
                 }
-                else if (e.getKeyCode()==KeyEvent.VK_2){
+                else if (e.getKeyCode()==KeyEvent.VK_2&&mode==1){
                     System.out.println(type);
                     System.out.println(d.getJson());
                 }
-                else if(e.getKeyCode()==KeyEvent.VK_3){
+                else if(e.getKeyCode()==KeyEvent.VK_3&&mode==1){
                     type = type==1 ? 2:1;
 
-                }else if (e.getKeyCode()==KeyEvent.VK_4){
+                }else if (e.getKeyCode()==KeyEvent.VK_4 && imported){
                     System.out.println("Export data");
                     try(FileWriter file = new FileWriter("Data.json")){
                         file.write(d.getJson());
                     }catch (IOException es){
                         System.out.println("Failed to Write");
                     }
-                }else if (e.getKeyCode()==KeyEvent.VK_5){
+                }else if (e.getKeyCode()==KeyEvent.VK_5 && !imported){
                     System.out.println("importing data");
                     try{
                         FileReader read = new FileReader("Data.json");
@@ -94,11 +114,14 @@ public class board extends JPanel{
                             }
                         }
                         bread.close();
+                        imported=true;
                         repaint();
                     }catch (Exception es){
                         es.printStackTrace();
                     }
                 }else if (e.getKeyCode()==KeyEvent.VK_6){
+                    mode = mode==1 ? 2:1;
+                }else if(e.getKeyCode()== KeyEvent.VK_1&& mode==2){
                 }
             }
         });
@@ -115,56 +138,18 @@ public class board extends JPanel{
             g2.fillRect(x-8,y-30,10,10);
         }
         g2.setColor(Color.blue);
-        for (Point point: pointsi){
-            g2.fillRect(point.x,point.y,10,10);
+        for (int i =1;i<=pointsi.size();i++) {
+            if (i == selectedi) {
+                g2.setColor(Color.MAGENTA);
+                g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
+                g2.setColor(Color.blue);
+
+            } else{
+                g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
+            }
         }
-        for (Point point : pointso) {
-            g2.fillOval(point.x, point.y, 25, 25);
+        for (int i =1;i<=pointso.size();i++){
+            g2.fillOval(pointso.get(i-1).x, pointso.get(i-1).y,25,25);
         }
     }
 }
-/* addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-                System.out.println(x+","+y);
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-
-            }
-                System.out.println("pressed");
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });*/

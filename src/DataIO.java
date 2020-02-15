@@ -2,8 +2,11 @@
 import org.json.simple.parser.JSONParser;
 import org.json.simple.*;
 
+import java.util.ArrayList;
+
 public class DataIO {
     private String data ="";
+    private ArrayList<JSONObject> nodes = new ArrayList<>();
     public void DataIO(){
 
     }
@@ -16,9 +19,12 @@ public class DataIO {
         point.add(x);
         point.add(y);
         node.put("Points",point);
-        data= data+node.toJSONString()+"\n";
+        nodes.add(node);
     }
     public String getJson(){
+        for(JSONObject o : nodes){
+            data= data+o.toJSONString()+"\n";
+        }
         return data;
     }
 }
