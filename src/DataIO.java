@@ -1,14 +1,15 @@
-import com.github.cliftonlabs.json_simple.*;
-import com.github.cliftonlabs.json_simple.JsonObject;
+
+import org.json.simple.parser.JSONParser;
+import org.json.simple.*;
 
 public class DataIO {
-    private JsonArray data = new JsonArray();
+    private JSONArray data = new JSONArray();
     public void DataIO(){
 
     }
     public void addData(int id, int conn,int type,int x, int y){
-        JsonObject node = new JsonObject();
-        JsonArray point = new JsonArray();
+        JSONObject node = new JSONObject();
+        JSONArray point = new JSONArray();
         node.put("ID",id);
         node.put("Connections",conn);
         node.put("Type",type);
@@ -17,7 +18,7 @@ public class DataIO {
         node.put("Points",point);
         data.add(node);
     }
-    public JsonArray getJson(){
+    public JSONArray getJson(){
         return data;
     }
 }
