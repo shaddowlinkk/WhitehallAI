@@ -21,8 +21,9 @@ public class board extends JPanel{
     private int type;
     private int mode = 1;
     private boolean imported = false;
-    private int selected;
-    private int[] conections;
+    private int selected,root;
+    private ArrayList<Integer> conections = new ArrayList<Integer>();
+    private ArrayList<Integer> conn = new ArrayList<Integer>();
 
     public board(JFrame f) {
         d = new DataIO();
@@ -109,7 +110,7 @@ public class board extends JPanel{
                             int type=(int)(long)indata.get("Type");
                             int x=(int)(long)inpoints.get(0);
                             int y=(int)(long)inpoints.get(1);
-                            d.addData(ID, conn, type, x, y);
+                            d.addData(ID, conn, type, x, y,(JSONArray) indata.get("Links"));
                             if(type==1){
                                 pointso.add(new Point(x,y));
                             }else if(type==2){
@@ -124,7 +125,28 @@ public class board extends JPanel{
                     }
                 }else if (e.getKeyCode()==KeyEvent.VK_6){
                     mode = mode==1 ? 2:1;
-                }else if(e.getKeyCode()== KeyEvent.VK_1&& mode==2){
+                }else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2){
+                    //TODO ADD INFO EDITER
+                }else if (e.getKeyCode() == KeyEvent.VK_2 && mode ==2){
+                    root=selected;
+                    System.out.println(root);
+                }else if (e.getKeyCode() == KeyEvent.VK_3 && mode ==2){
+                    conections.add(selected);
+                    System.out.println(Arrays.toString(conections.toArray()));
+                }else if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    System.out.println(root);
+                    d.addLinks(root,conections);
+                    root=0;
+                    conections.clear();
+                    repaint();
+                }else if (e.getKeyCode() == KeyEvent.VK_7 && mode ==2){
+                    conections=d.getLinks(selected);
+                    repaint();
+                    System.out.println(Arrays.toString(conections.toArray()));
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_8 && mode ==2){
+                    conections.clear();
+                    repaint();
                 }
             }
         });
@@ -142,18 +164,36 @@ public class board extends JPanel{
         }
         g2.setColor(Color.blue);
         for (int i =1;i<=pointsi.size();i++) {
-            if (i == selected) {
+            if (i == selected|| conections.contains(i)) {
                 g2.setColor(Color.MAGENTA);
                 g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
                 g2.setColor(Color.blue);
 
-            } else{
+            }else if (i == root) {
+                g2.setColor(Color.yellow);
+                g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
+                g2.setColor(Color.blue);
+
+            }else if(d.hasLinks(i)){
+                g2.setColor(Color.red);
+                g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
+                g2.setColor(Color.blue);
+            }else{
                 g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
             }
         }
         for (int i =1;i<=pointso.size();i++){
-            if(i == (selected-174)){
+
+            if(i == (selected-174)|| conections.contains(i+174)){
                 g2.setColor(Color.MAGENTA);
+                g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
+                g2.setColor(Color.blue);
+            }else if(i == (root-174)){
+                g2.setColor(Color.yellow);
+                g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
+                g2.setColor(Color.blue);
+            }else if(d.hasLinks(i+174)){
+                g2.setColor(Color.red);
                 g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
                 g2.setColor(Color.blue);
             }else {
