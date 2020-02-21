@@ -4,11 +4,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import javax.swing.*;
+
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
@@ -19,7 +18,7 @@ public class board extends JPanel{
     private ArrayList<Point> pointsi = new ArrayList<Point>();
     private DataIO d;
     private int type;
-    private int mode = 1;
+    private int mode = 2;
     private boolean imported = false;
     private int selected,root;
     private ArrayList<Integer> conections = new ArrayList<Integer>();
@@ -71,8 +70,6 @@ public class board extends JPanel{
                     }
                     else {
                         pointsi.add(new Point(x - 8, y - 30));
-                        //Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID(next number:"+pointsi.size()+")"))
-
                         int ID =pointsi.size();
                         e.consume();
                         int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+pointsi.size()+") Conections"));
@@ -91,7 +88,7 @@ public class board extends JPanel{
 
                 }else if (e.getKeyCode()==KeyEvent.VK_4 && imported){
                     System.out.println("Export data");
-                    try(FileWriter file = new FileWriter("Data.json")){
+                    try(FileWriter file = new FileWriter("Data.data")){
                         file.write(d.getJson());
                     }catch (IOException es){
                         System.out.println("Failed to Write");
@@ -99,7 +96,7 @@ public class board extends JPanel{
                 }else if (e.getKeyCode()==KeyEvent.VK_5 && !imported){
                     System.out.println("importing data");
                     try{
-                        FileReader read = new FileReader("Data.json");
+                        FileReader read = new FileReader("Data.data");
                         BufferedReader bread = new BufferedReader(read);
                         String line="";
                         while ((line =bread.readLine())!= null) {
@@ -125,12 +122,13 @@ public class board extends JPanel{
                     }
                 }else if (e.getKeyCode()==KeyEvent.VK_6){
                     mode = mode==1 ? 2:1;
-                }else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2){
-                    //TODO ADD INFO EDITER
+                }else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2 && selected!=0){
+                    editing ed = new editing(SArray(d.getLinks(selected)),d.getID(selected),d.getType(selected));
+                    ed.setVisible(true);
                 }else if (e.getKeyCode() == KeyEvent.VK_2 && mode ==2){
                     root=selected;
                     System.out.println(root);
-                }else if (e.getKeyCode() == KeyEvent.VK_3 && mode ==2){
+                }else if (e.getKeyCode() == KeyEvent.VK_3 && mode ==2 && !conections.contains(selected)&& selected!= root){
                     conections.add(selected);
                     System.out.println(Arrays.toString(conections.toArray()));
                 }else if (e.getKeyCode() == KeyEvent.VK_ENTER){
@@ -200,5 +198,12 @@ public class board extends JPanel{
                 g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
             }
         }
+    }
+    public String[] SArray(ArrayList<Integer> l){
+        String[] out = new String[l.size()];
+        for (int i =0; i< out.length; i++){
+            out[i]=Integer.toString(l.get(i));
+        }
+        return out;
     }
 }

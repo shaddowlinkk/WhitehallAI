@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 /*
- * Created by JFormDesigner on Sat Feb 15 17:16:57 EST 2020
+ * Created by JFormDesigner on Fri Feb 21 16:16:11 EST 2020
  */
 
 
@@ -11,8 +11,16 @@ import javax.swing.*;
  * @author mac
  */
 public class editing extends JFrame {
-	public editing() {
-		initComponents();
+	public editing(String[] list,int id ,int type) {
+		initComponents(list,id,type);
+	}
+
+	private void textField1ActionPerformed(ActionEvent e) {
+		// TODO add your code here
+	}
+
+	private void textField2ActionPerformed(ActionEvent e) {
+		// TODO add your code here
 	}
 
 	private void pointsItemStateChanged(ItemEvent e) {
@@ -20,10 +28,22 @@ public class editing extends JFrame {
 	}
 
 	private void OKActionPerformed(ActionEvent e) {
-		System.out.println("hello");
+		// TODO add your code here
 	}
 
-	private void initComponents() {
+	private void ApplyActionPerformed(ActionEvent e) {
+		// TODO add your code here
+	}
+
+	private void MoveActionPerformed(ActionEvent e) {
+		// TODO add your code here
+	}
+
+	private void CalncelActionPerformed(ActionEvent e) {
+		// TODO add your code here
+	}
+
+	private void initComponents(String[] list,int id ,int type) {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - mac
 		panel1 = new JPanel();
@@ -31,15 +51,19 @@ public class editing extends JFrame {
 		textField1 = new JTextField();
 		label2 = new JLabel();
 		textField2 = new JTextField();
-		points = new JComboBox();
-		textField3 = new JTextField();
-		OK = new JButton();
+		Connections = new JComboBox(list);
+		add = new JButton();
 		label3 = new JLabel();
+		Apply = new JButton();
+		del = new JButton();
+		Move = new JButton();
+		Calncel = new JButton();
 
 		//======== this ========
 		setMaximizedBounds(new Rectangle(0, 0, 0, 0));
 		setVisible(true);
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Editer");
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
@@ -47,45 +71,76 @@ public class editing extends JFrame {
 		{
 
 			// JFormDesigner evaluation mark
+			/*
 			panel1.setBorder(new javax.swing.border.CompoundBorder(
 				new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-					"JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+					"", javax.swing.border.TitledBorder.CENTER,
 					javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
 					java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
+			*/
 			panel1.setLayout(null);
 
 			//---- label1 ----
 			label1.setText("ID");
 			panel1.add(label1);
 			label1.setBounds(15, 20, 20, 25);
+
+			//---- textField1 ----
+			textField1.addActionListener(e -> textField1ActionPerformed(e));
+			textField1.setText(Integer.toString(id));
 			panel1.add(textField1);
-			textField1.setBounds(40, 20, 180, 25);
+			textField1.setBounds(50, 20, 180, 25);
 
 			//---- label2 ----
 			label2.setText("Type");
 			panel1.add(label2);
-			label2.setBounds(5, 50, 25, 25);
+			label2.setBounds(10, 50, 30, 25);
+
+			//---- textField2 ----
+			textField2.addActionListener(e -> textField2ActionPerformed(e));
+			textField2.setText(Integer.toString(type));
 			panel1.add(textField2);
-			textField2.setBounds(40, 50, 180, 25);
+			textField2.setBounds(50, 50, 180, 25);
 
-			//---- points ----
-			points.addItemListener(e -> pointsItemStateChanged(e));
-			panel1.add(points);
-			points.setBounds(45, 80, 95, points.getPreferredSize().height);
-			panel1.add(textField3);
-			textField3.setBounds(145, 80, 60, textField3.getPreferredSize().height);
+			//---- Connections ----
+			Connections.addItemListener(e -> pointsItemStateChanged(e));
+			panel1.add(Connections);
+			Connections.setBounds(45, 80, 95, Connections.getPreferredSize().height);
 
-			//---- OK ----
-			OK.setText("OK");
-			OK.addActionListener(e -> OKActionPerformed(e));
-			panel1.add(OK);
-			OK.setBounds(new Rectangle(new Point(210, 80), OK.getPreferredSize()));
+			//---- add ----
+			add.setText("Add");
+			add.addActionListener(e -> OKActionPerformed(e));
+			panel1.add(add);
+			add.setBounds(145, 80, 60, 25);
 
 			//---- label3 ----
-			label3.setText("Points");
+			label3.setText("Conns");
 			panel1.add(label3);
 			label3.setBounds(new Rectangle(new Point(5, 85), label3.getPreferredSize()));
+
+			//---- Apply ----
+			Apply.setText("Apply");
+			Apply.addActionListener(e -> ApplyActionPerformed(e));
+			panel1.add(Apply);
+			Apply.setBounds(20, 130, 80, 25);
+
+			//---- del ----
+			del.setText("Del");
+			del.addActionListener(e -> OKActionPerformed(e));
+			panel1.add(del);
+			del.setBounds(210, 80, 60, 25);
+
+			//---- Move ----
+			Move.setText("Move");
+			Move.addActionListener(e -> MoveActionPerformed(e));
+			panel1.add(Move);
+			Move.setBounds(100, 130, 80, 25);
+
+			//---- Calncel ----
+			Calncel.setText("Cancel");
+			Calncel.addActionListener(e -> CalncelActionPerformed(e));
+			panel1.add(Calncel);
+			Calncel.setBounds(180, 130, 80, 25);
 
 			{ // compute preferred size
 				Dimension preferredSize = new Dimension();
@@ -102,7 +157,7 @@ public class editing extends JFrame {
 			}
 		}
 		contentPane.add(panel1, BorderLayout.CENTER);
-		setSize(285, 215);
+		setSize(295, 215);
 		setLocationRelativeTo(getOwner());
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
@@ -114,9 +169,12 @@ public class editing extends JFrame {
 	private JTextField textField1;
 	private JLabel label2;
 	private JTextField textField2;
-	private JComboBox points;
-	private JTextField textField3;
-	private JButton OK;
+	private JComboBox Connections;
+	private JButton add;
 	private JLabel label3;
+	private JButton Apply;
+	private JButton del;
+	private JButton Move;
+	private JButton Calncel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

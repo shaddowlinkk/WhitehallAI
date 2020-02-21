@@ -3,6 +3,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.*;
 import sun.plugin.javascript.navig.Link;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class DataIO {
@@ -67,5 +68,19 @@ public class DataIO {
             data= data+o.toJSONString()+"\n";
         }
         return data;
+    }
+    public void setPoints(int index, Point p){
+        JSONObject node =nodes.get(index);
+        JSONArray point = new JSONArray();
+        node.remove("Points");
+        point.add(p.x);
+        point.add(p.y);
+        node.put("Points",point);
+    }
+    public int getID( int index){
+        return (Integer) nodes.get(index).get("ID");
+    }
+    public int getType( int index){
+        return (Integer) nodes.get(index).get("Type");
     }
 }
