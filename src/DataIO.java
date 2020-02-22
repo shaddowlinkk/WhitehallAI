@@ -75,12 +75,12 @@ public class DataIO {
         return data;
     }
     public void setPoints(int index, Point p){
-        JSONObject node =nodes.get(index);
-        JSONArray point = new JSONArray();
+        JSONObject node =nodes.get(index-1);
+        JSONArray tpoint = new JSONArray();
         node.remove("Points");
-        point.add(p.x);
-        point.add(p.y);
-        node.put("Points",point);
+        tpoint.add(p.x);
+        tpoint.add(p.y);
+        node.put("Points",tpoint);
     }
     public int getID( int index){
         return (Integer) nodes.get(index).get("ID");

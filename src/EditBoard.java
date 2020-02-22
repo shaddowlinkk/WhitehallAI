@@ -84,6 +84,11 @@ public class EditBoard extends JPanel{
                 Click Events if moving a node with node editor
                  */
                 else {
+                    if(type==1) {
+                        data.setPoints(selected,pointso.get(selected-175));
+                    }else {
+                        data.setPoints(selected,pointsi.get(selected-1));
+                    }
                     ed.stopMove();
                 }
             }
