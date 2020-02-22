@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
-
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
