@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class RunBoard extends JPanel {
+     //TODO generate adjacency list
      private ArrayList<Point> pointso = new ArrayList<Point>();
      private ArrayList<Point> pointsi = new ArrayList<Point>();
      private  DataIO data ;
