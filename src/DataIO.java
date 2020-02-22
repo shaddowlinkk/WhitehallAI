@@ -45,8 +45,18 @@ public class DataIO {
             link.add(i);
         }
         node.put("Links",link);
-
     }
+
+    public void addLinks(int root,Integer[] links){
+        JSONArray link =new JSONArray();
+        JSONObject node = nodes.get(root-1);
+        node.remove("Links");
+        for (int i : links){
+            link.add(i);
+        }
+        node.put("Links",link);
+    }
+
     public ArrayList<Integer> getLinks(int selected){
         ArrayList<Integer> out = new ArrayList<Integer>();
         JSONObject node = nodes.get(selected-1);
