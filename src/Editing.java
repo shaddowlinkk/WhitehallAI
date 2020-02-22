@@ -45,25 +45,23 @@ public class Editing extends JFrame {
 		// TODO add your code here
 	}
 
-	private void pointsItemStateChanged(ItemEvent e) {
-		// TODO add your code here
+	private void pointsItemStateChanged(ActionEvent e) {
+		Connections.getSelectedIndex();
 	}
-
-	private void OKActionPerformed(ActionEvent e) {
-		// TODO add your code here
+	private void addActionPerformed(ActionEvent e) {
 	}
-
+	private void delActionPerformed(ActionEvent e) {
+	}
 	private void ApplyActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		setVisible(false);
 	}
 
 	private void MoveActionPerformed(ActionEvent e) {
 		Mclick=true;
-		// TODO add your code here
 	}
 
 	private void CalncelActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		setVisible(false);
 	}
 
 	private void initComponents() {
@@ -123,13 +121,13 @@ public class Editing extends JFrame {
 			textField2.setBounds(50, 50, 180, 25);
 
 			//---- Connections ----
-			Connections.addItemListener(e -> pointsItemStateChanged(e));
+			Connections.addActionListener(e -> pointsItemStateChanged(e));
 			panel1.add(Connections);
 			Connections.setBounds(45, 80, 95, Connections.getPreferredSize().height);
 
 			//---- add ----
 			add.setText("Add");
-			add.addActionListener(e -> OKActionPerformed(e));
+			add.addActionListener(e -> addActionPerformed(e));
 			panel1.add(add);
 			add.setBounds(145, 80, 60, 25);
 
@@ -146,7 +144,7 @@ public class Editing extends JFrame {
 
 			//---- del ----
 			del.setText("Del");
-			del.addActionListener(e -> OKActionPerformed(e));
+			del.addActionListener(e -> delActionPerformed(e));
 			panel1.add(del);
 			del.setBounds(210, 80, 60, 25);
 
@@ -181,6 +179,8 @@ public class Editing extends JFrame {
 		setLocationRelativeTo(getOwner());
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
+
+
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - mac

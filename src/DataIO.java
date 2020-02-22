@@ -69,8 +69,10 @@ public class DataIO {
         }
     }
     public String getJson(){
-        for(JSONObject o : nodes){
-            data= data+o.toJSONString()+"\n";
+        if (data.isEmpty()) {
+            for (JSONObject o : nodes) {
+                data = data + o.toJSONString() + "\n";
+            }
         }
         return data;
     }
@@ -81,6 +83,16 @@ public class DataIO {
         tpoint.add(p.x);
         tpoint.add(p.y);
         node.put("Points",tpoint);
+    }
+    public void setType(int index,int type){
+        JSONObject node =nodes.get(index);
+        node.remove("Type");
+        node.put("Type",type);
+    }
+    public void setID(int index,int id){
+        JSONObject node =nodes.get(index);
+        node.remove("ID");
+        node.put("id",id);
     }
     public int getID( int index){
         return (Integer) nodes.get(index).get("ID");
