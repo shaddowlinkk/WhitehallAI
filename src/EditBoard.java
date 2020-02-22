@@ -8,6 +8,7 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
 public class EditBoard extends JPanel{
+
     private Image img = Toolkit.getDefaultToolkit().getImage("board.jpg");
     private int y;
     private int x;
@@ -198,6 +199,7 @@ public class EditBoard extends JPanel{
                Enter: sets root nodes connections to data object
                  */
                 else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2 && selected!=0){
+                    //TODO add ability to modify all data
                     openE=true;
                     ed.setList(SArray(data.getLinks(selected)));
                     if(data.getType(selected-1)==1){
