@@ -59,9 +59,14 @@ public class DataIO {
         return out;
     }
     public boolean hasLinks(int selected){
-        JSONObject node = nodes.get(selected-1);
-        JSONArray links = (JSONArray) node.get("Links");
-        return (links != null);
+
+        try {
+            JSONObject node = nodes.get(selected - 1);
+            JSONArray links = (JSONArray) node.get("Links");
+            return (links != null);
+        }catch (IndexOutOfBoundsException e){
+            return false;
+        }
     }
     public String getJson(){
         for(JSONObject o : nodes){

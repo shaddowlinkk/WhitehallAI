@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,48 +13,104 @@ public class board extends JPanel{
     private int x;
     private ArrayList<Point> pointso = new ArrayList<Point>();
     private ArrayList<Point> pointsi = new ArrayList<Point>();
-    private DataIO d;
+    private DataIO data;
+    private editing ed = new editing(data);
     private int type;
     private int mode = 2;
     private boolean imported = false;
+    private boolean openE= false;
     private int selected,root;
     private ArrayList<Integer> conections = new ArrayList<Integer>();
     private ArrayList<Integer> conn = new ArrayList<Integer>();
 
     public board(JFrame f) {
-        d = new DataIO();
+        data = new DataIO();
         type = 1;
         f.addMouseListener(new MouseAdapter() {
 
             @Override
+            /*
+            Used for selecting the node on the ghraph
+             */
             public void mouseClicked(MouseEvent e) {
-                if(mode==1) {
-                    x = e.getX();
-                    y = e.getY();
-                    repaint();
-                }else{
-                    for (int i =1;i<=pointsi.size();i++){
-                        if(e.getX()-8<=pointsi.get(i-1).x&&e.getX()-8>=pointsi.get(i-1).x-11){
-                            if(e.getY()-30<=pointsi.get(i-1).y&&e.getY()-30>=pointsi.get(i-1).y-11){
-                                selected=i;
-                                repaint();
+                if (!ed.getMove()) {
+                    if (mode == 1) {
+                        x = e.getX();
+                        y = e.getY();
+                        repaint();
+                    } else {
+                        for (int i = 1; i <= pointsi.size(); i++) {
+                            if (e.getX() - 8 <= pointsi.get(i - 1).x && e.getX() - 8 >= pointsi.get(i - 1).x - 11) {
+                                if (e.getY() - 30 <= pointsi.get(i - 1).y && e.getY() - 30 >= pointsi.get(i - 1).y - 11) {
+                                    selected = i;
+                                    if (openE) {
+                                        ed.setList(SArray(data.getLinks(selected)));
+                                        if(data.getType(selected-1)==1){
+                                            ed.setID(data.getID(selected-1)-174);
+                                        }else
+                                            ed.setID(data.getID(selected-1));
+                                        ed.setType(data.getType(selected-1));
+                                        ed.setVisible(true);
+                                    }
+                                    repaint();
+                                }
                             }
                         }
-                    }
-                    for (int i =1;i<=pointso.size();i++) {
-                        if (e.getX() - 24 <= pointso.get(i - 1).x && e.getX() - 24 >= pointso.get(i - 1).x - 25) {
-                            if (e.getY() - 50 <= pointso.get(i - 1).y && e.getY() - 50 >= pointso.get(i - 1).y - 25) {
-                                selected = i + 174;
-                                repaint();
+                        for (int i = 1; i <= pointso.size(); i++) {
+                            if (e.getX() - 24 <= pointso.get(i - 1).x && e.getX() - 24 >= pointso.get(i - 1).x - 25) {
+                                if (e.getY() - 50 <= pointso.get(i - 1).y && e.getY() - 50 >= pointso.get(i - 1).y - 25) {
+                                    selected = i + 174;
+                                    if (openE) {
+                                        ed.setList(SArray(data.getLinks(selected)));
+                                        if(data.getType(selected-1)==1){
+                                            ed.setID(data.getID(selected-1)-174);
+                                        }else
+                                            ed.setID(data.getID(selected-1));
+                                        ed.setType(data.getType(selected-1));
+                                        ed.setVisible(true);
+                                    }
+                                    repaint();
+                                }
                             }
                         }
                     }
                 }
+                /*
+                Click Events if moving a node with node editor
+                 */
+                else {
+                    ed.stopMove();
+                }
             }
         });
+
+       f.addMouseMotionListener(new MouseMotionListener() {
+           @Override
+           public void mouseDragged(MouseEvent e) {
+
+           }
+
+           @Override
+           public void mouseMoved(MouseEvent e) {
+               if (ed.getMove()){
+                   if(type==1) {
+                       pointso.set(selected-175,new Point(e.getX() - 16, e.getY() - 34));
+                       repaint();
+                   }else {
+                       pointsi.set(selected-1, new Point(e.getX() - 8, e.getY() - 30));
+                       repaint();
+                   }
+               }
+           }
+       });
         f.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
+                /*
+                Mode 1 Key Operations
+                1: mark current location as an instants of node type X and specify number of connections
+                2: changes the type of node
+                 */
                 if(e.getKeyCode()==KeyEvent.VK_1&&mode==1) {
                     if(type==1) {
                         pointso.add(new Point(x - 16, y - 34));
@@ -65,7 +118,7 @@ public class board extends JPanel{
                         e.consume();
                         int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+(pointso.size())+") Conections"));
                         e.consume();
-                        d.addData(ID, conn, type, x-16, y-34);
+                        data.addData(ID, conn, type, x-16, y-34);
                         repaint();
                     }
                     else {
@@ -74,26 +127,31 @@ public class board extends JPanel{
                         e.consume();
                         int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+pointsi.size()+") Conections"));
                         e.consume();
-                        d.addData(ID, conn, type, x-8, y-30);
+                        data.addData(ID, conn, type, x-8, y-30);
                         repaint();
 
                     }
                 }
-                else if (e.getKeyCode()==KeyEvent.VK_2&&mode==1){
-                    System.out.println(type);
-                    System.out.println(d.getJson());
-                }
-                else if(e.getKeyCode()==KeyEvent.VK_3&&mode==1){
+                else if(e.getKeyCode()==KeyEvent.VK_2&&mode==1){
                     type = type==1 ? 2:1;
 
-                }else if (e.getKeyCode()==KeyEvent.VK_4 && imported){
+                }
+                /*
+                Universal Key Operations
+                4: Export data to data file
+                5: import data from data file
+                6: switch between modes
+                 */
+
+                else if (e.getKeyCode()==KeyEvent.VK_4 && imported){
                     System.out.println("Export data");
                     try(FileWriter file = new FileWriter("Data.data")){
-                        file.write(d.getJson());
+                        file.write(data.getJson());
                     }catch (IOException es){
                         System.out.println("Failed to Write");
                     }
-                }else if (e.getKeyCode()==KeyEvent.VK_5 && !imported){
+                } else if (e.getKeyCode()==KeyEvent.VK_5 && !imported){
+                    //TODO MOVE THIS TO DataIO
                     System.out.println("importing data");
                     try{
                         FileReader read = new FileReader("Data.data");
@@ -107,7 +165,7 @@ public class board extends JPanel{
                             int type=(int)(long)indata.get("Type");
                             int x=(int)(long)inpoints.get(0);
                             int y=(int)(long)inpoints.get(1);
-                            d.addData(ID, conn, type, x, y,(JSONArray) indata.get("Links"));
+                            data.addData(ID, conn, type, x, y,(JSONArray) indata.get("Links"));
                             if(type==1){
                                 pointso.add(new Point(x,y));
                             }else if(type==2){
@@ -115,6 +173,7 @@ public class board extends JPanel{
                             }
                         }
                         bread.close();
+                        //System.out.println(pointsi.size()+"|"+pointso.size());
                         imported=true;
                         repaint();
                     }catch (Exception es){
@@ -122,8 +181,26 @@ public class board extends JPanel{
                     }
                 }else if (e.getKeyCode()==KeyEvent.VK_6){
                     mode = mode==1 ? 2:1;
-                }else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2 && selected!=0){
-                    editing ed = new editing(SArray(d.getLinks(selected)),d.getID(selected),d.getType(selected));
+                }
+
+                /*
+                Mode 2 Key Operations
+                1: opens the node editor
+                2: sets selected as root for connections
+                3: sets selected node as a connected node to the root node
+                4-6: same as be for universal keys
+                7: show selected nodes connected nodes
+                8: stop showing nodes connections
+               Enter: sets root nodes connections to data object
+                 */
+                else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2 && selected!=0){
+                    openE=true;
+                    ed.setList(SArray(data.getLinks(selected)));
+                    if(data.getType(selected-1)==1){
+                        ed.setID(data.getID(selected-1)-174);
+                    }else
+                        ed.setID(data.getID(selected-1));
+                    ed.setType(data.getType(selected-1));
                     ed.setVisible(true);
                 }else if (e.getKeyCode() == KeyEvent.VK_2 && mode ==2){
                     root=selected;
@@ -131,14 +208,14 @@ public class board extends JPanel{
                 }else if (e.getKeyCode() == KeyEvent.VK_3 && mode ==2 && !conections.contains(selected)&& selected!= root){
                     conections.add(selected);
                     System.out.println(Arrays.toString(conections.toArray()));
-                }else if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                }else if (e.getKeyCode() == KeyEvent.VK_ENTER && mode==2){
                     System.out.println(root);
-                    d.addLinks(root,conections);
+                    data.addLinks(root,conections);
                     root=0;
                     conections.clear();
                     repaint();
                 }else if (e.getKeyCode() == KeyEvent.VK_7 && mode ==2){
-                    conections=d.getLinks(selected);
+                    conections= data.getLinks(selected);
                     repaint();
                     System.out.println(Arrays.toString(conections.toArray()));
                 }
@@ -172,7 +249,7 @@ public class board extends JPanel{
                 g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
                 g2.setColor(Color.blue);
 
-            }else if(d.hasLinks(i)){
+            }else if(data.hasLinks(i)){
                 g2.setColor(Color.red);
                 g2.fillRect(pointsi.get(i - 1).x, pointsi.get(i - 1).y, 10, 10);
                 g2.setColor(Color.blue);
@@ -190,7 +267,7 @@ public class board extends JPanel{
                 g2.setColor(Color.yellow);
                 g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
                 g2.setColor(Color.blue);
-            }else if(d.hasLinks(i+174)){
+            }else if(data.hasLinks(i+174)){
                 g2.setColor(Color.red);
                 g2.fillOval(pointso.get(i - 1).x, pointso.get(i - 1).y, 25, 25);
                 g2.setColor(Color.blue);

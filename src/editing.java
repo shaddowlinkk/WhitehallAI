@@ -11,8 +11,30 @@ import javax.swing.*;
  * @author mac
  */
 public class editing extends JFrame {
-	public editing(String[] list,int id ,int type) {
-		initComponents(list,id,type);
+	public editing(DataIO _data) {
+		 data=_data;
+		 initComponents();
+	}
+
+	public void setList(String[] l){
+		DefaultComboBoxModel m = new DefaultComboBoxModel(l);
+		Connections.setModel(m);
+	}
+
+	public void setID(int i){
+		id=i;
+		textField1.setText(Integer.toString(i));
+	}
+
+	public void setType(int t){
+		textField2.setText(Integer.toString(t));
+	}
+
+	public Boolean getMove(){
+		return Mclick;
+	}
+	public void stopMove(){
+		Mclick=false;
 	}
 
 	private void textField1ActionPerformed(ActionEvent e) {
@@ -36,6 +58,7 @@ public class editing extends JFrame {
 	}
 
 	private void MoveActionPerformed(ActionEvent e) {
+		Mclick=true;
 		// TODO add your code here
 	}
 
@@ -43,7 +66,7 @@ public class editing extends JFrame {
 		// TODO add your code here
 	}
 
-	private void initComponents(String[] list,int id ,int type) {
+	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - mac
 		panel1 = new JPanel();
@@ -51,7 +74,7 @@ public class editing extends JFrame {
 		textField1 = new JTextField();
 		label2 = new JLabel();
 		textField2 = new JTextField();
-		Connections = new JComboBox(list);
+		Connections = new JComboBox();
 		add = new JButton();
 		label3 = new JLabel();
 		Apply = new JButton();
@@ -61,7 +84,6 @@ public class editing extends JFrame {
 
 		//======== this ========
 		setMaximizedBounds(new Rectangle(0, 0, 0, 0));
-		setVisible(true);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Editer");
 		Container contentPane = getContentPane();
@@ -87,7 +109,6 @@ public class editing extends JFrame {
 
 			//---- textField1 ----
 			textField1.addActionListener(e -> textField1ActionPerformed(e));
-			textField1.setText(Integer.toString(id));
 			panel1.add(textField1);
 			textField1.setBounds(50, 20, 180, 25);
 
@@ -98,7 +119,6 @@ public class editing extends JFrame {
 
 			//---- textField2 ----
 			textField2.addActionListener(e -> textField2ActionPerformed(e));
-			textField2.setText(Integer.toString(type));
 			panel1.add(textField2);
 			textField2.setBounds(50, 50, 180, 25);
 
@@ -176,5 +196,10 @@ public class editing extends JFrame {
 	private JButton del;
 	private JButton Move;
 	private JButton Calncel;
+	private boolean Mclick;
+	private DataIO data;
+	private String[] list;
+	private int id;
+	private int type;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
