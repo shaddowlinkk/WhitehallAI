@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author mac
  */
-public class editing extends JFrame {
-	public editing(DataIO _data) {
+public class Editing extends JFrame {
+	public Editing(DataIO _data) {
 		 data=_data;
 		 initComponents();
 	}

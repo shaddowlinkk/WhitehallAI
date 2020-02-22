@@ -7,13 +7,14 @@ import javax.swing.*;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
-public class board extends JPanel{
+public class EditBoard extends JPanel{
+    private Image img = Toolkit.getDefaultToolkit().getImage("board.jpg");
     private int y;
     private int x;
     private ArrayList<Point> pointso = new ArrayList<Point>();
     private ArrayList<Point> pointsi = new ArrayList<Point>();
     private DataIO data;
-    private editing ed = new editing(data);
+    private Editing ed = new Editing(data);
     private int type;
     private int mode = 2;
     private boolean imported = false;
@@ -22,7 +23,7 @@ public class board extends JPanel{
     private ArrayList<Integer> conections = new ArrayList<Integer>();
     private ArrayList<Integer> conn = new ArrayList<Integer>();
 
-    public board(JFrame f) {
+    public EditBoard(JFrame f) {
         data = new DataIO();
         type = 1;
         f.addMouseListener(new MouseAdapter() {
@@ -32,6 +33,11 @@ public class board extends JPanel{
             Used for selecting the node on the ghraph
              */
             public void mouseClicked(MouseEvent e) {
+                /*
+                Click events for modes(only work if not moving node)
+                1: places node down
+                2: selects a node
+                 */
                 if (!ed.getMove()) {
                     if (mode == 1) {
                         x = e.getX();
@@ -83,12 +89,7 @@ public class board extends JPanel{
             }
         });
 
-       f.addMouseMotionListener(new MouseMotionListener() {
-           @Override
-           public void mouseDragged(MouseEvent e) {
-
-           }
-
+       f.addMouseMotionListener(new MouseMotionAdapter() {
            @Override
            public void mouseMoved(MouseEvent e) {
                if (ed.getMove()){
@@ -172,7 +173,6 @@ public class board extends JPanel{
                             }
                         }
                         bread.close();
-                        //System.out.println(pointsi.size()+"|"+pointso.size());
                         imported=true;
                         repaint();
                     }catch (Exception es){
@@ -225,7 +225,7 @@ public class board extends JPanel{
             }
         });
     }
-    Image img = Toolkit.getDefaultToolkit().getImage("board.jpg");
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(img, 0, 0,getWidth(),getHeight(),this);
