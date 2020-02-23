@@ -63,7 +63,7 @@ public class DataIO {
         JSONArray links = (JSONArray) node.get("Links");
         if(links != null) {
             for (int i = 0; i < links.toArray().length; i++) {
-                out.add(((int)(long) links.toArray()[i]));
+                out.add((Integer.parseInt(""+links.toArray()[i])));
             }
         }
         return out;
@@ -95,16 +95,17 @@ public class DataIO {
         node.put("Points",tpoint);
     }
     public void setType(int index,int type){
-        JSONObject node =nodes.get(index);
+        JSONObject node =nodes.get(index-1);
         node.remove("Type");
         node.put("Type",type);
     }
     public void setID(int index,int id){
-        JSONObject node =nodes.get(index);
+        JSONObject node =nodes.get(index-1);
         node.remove("ID");
-        node.put("id",id);
+        node.put("ID",id);
     }
     public int getID( int index){
+
         return (Integer) nodes.get(index).get("ID");
     }
     public int getType( int index){

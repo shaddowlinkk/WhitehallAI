@@ -51,11 +51,9 @@ public class EditBoard extends JPanel{
                                 if (e.getY() - 30 <= pointsi.get(i - 1).y && e.getY() - 30 >= pointsi.get(i - 1).y - 11) {
                                     selected = i;
                                     if (openE) {
+                                        ed.setSelect(selected);
                                         ed.setList(SArray(data.getLinks(selected)));
-                                        if(data.getType(selected-1)==1){
-                                            ed.setID(data.getID(selected-1)-174);
-                                        }else
-                                            ed.setID(data.getID(selected-1));
+                                        ed.setID(data.getID(selected-1));
                                         ed.setType(data.getType(selected-1));
                                         ed.setVisible(true);
                                     }
@@ -68,11 +66,9 @@ public class EditBoard extends JPanel{
                                 if (e.getY() - 50 <= pointso.get(i - 1).y && e.getY() - 50 >= pointso.get(i - 1).y - 25) {
                                     selected = i + 174;
                                     if (openE) {
+                                        ed.setSelect(selected);
                                         ed.setList(SArray(data.getLinks(selected)));
-                                        if(data.getType(selected-1)==1){
-                                            ed.setID(data.getID(selected-1)-174);
-                                        }else
-                                            ed.setID(data.getID(selected-1));
+                                        ed.setID(data.getID(selected-1));
                                         ed.setType(data.getType(selected-1));
                                         ed.setVisible(true);
                                     }
@@ -221,11 +217,9 @@ public class EditBoard extends JPanel{
                     }else {
                         reset=pointsi.get(selected-1);
                     }
+                    ed.setSelect(selected);
                     ed.setList(SArray(data.getLinks(selected)));
-                    if(data.getType(selected-1)==1){
-                        ed.setID(data.getID(selected-1)-174);
-                    }else
-                        ed.setID(data.getID(selected-1));
+                    ed.setID(data.getID(selected-1));
                     ed.setType(data.getType(selected-1));
                     ed.setVisible(true);
                 }else if (e.getKeyCode() == KeyEvent.VK_2 && mode ==2){

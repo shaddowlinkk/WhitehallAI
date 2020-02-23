@@ -11,6 +11,7 @@ import javax.swing.*;
 /**
  * @author mac
  */
+// TODO workout saving bug
 public class Editing extends JFrame {
 	public Editing(DataIO _data) {
 		 data=_data;
@@ -27,7 +28,10 @@ public class Editing extends JFrame {
 		id=i;
 		textField1.setText(Integer.toString(i));
 	}
+	public void setSelect(int s){
+		select=s;
 
+	}
 	public void setType(int t){
 		type=t;
 		textField2.setText(Integer.toString(t));
@@ -60,22 +64,16 @@ public class Editing extends JFrame {
 		Connections.addItem(Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID#:")));
 	}
 	private void delActionPerformed(ActionEvent e) {
-		Connections.remove(Connections.getSelectedIndex());
+		Connections.removeItemAt(Connections.getSelectedIndex());
 	}
 	private void ApplyActionPerformed(ActionEvent e) {
 		apply=true;
-		int index=0;
-		if(type==1){
-			index=id+174;
-		}else{
-			index=id;
-		}
-		System.out.println(index);
+		int index=select;
 		data.setID(index,Integer.parseInt(textField1.getText()));
 		data.setType(index,Integer.parseInt(textField2.getText()));
 		ArrayList<Integer> links= new ArrayList<Integer>();
 		for (int i=0;i<Connections.getItemCount();i++){
-			links.add(Integer.parseInt((String) Connections.getItemAt(i)));
+			links.add(Integer.parseInt( ""+Connections.getItemAt(i)));
 		}
 		data.addLinks(index,links);
 		setVisible(false);
@@ -221,6 +219,7 @@ public class Editing extends JFrame {
 	private JButton del;
 	private JButton Move;
 	private JButton Calncel;
+	private int select;
 	private boolean Mclick;
 	private DataIO data;
 	private String[] list;
