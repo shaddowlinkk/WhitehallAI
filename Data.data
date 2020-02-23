@@ -172,7 +172,7 @@
 {"Connections":3,"Type":2,"Points":[533,786],"Links":[357,356,359],"ID":172}
 {"Connections":3,"Type":2,"Points":[680,789],"Links":[360,359],"ID":173}
 {"Connections":3,"Type":2,"Points":[719,790],"Links":[362,361,173],"ID":174}
-{"Connections":2,"Type":1,"Points":[68,46],"Links":[27,1],"ID":175}
+{"Connections":2,"Points":[68,46],"Type":1,"Links":[27,1],"ID":175}
 {"Connections":3,"Type":1,"Points":[234,32],"Links":[3,4,5],"ID":176}
 {"Connections":3,"Type":1,"Points":[323,38],"Links":[6,7,8],"ID":177}
 {"Connections":2,"Type":1,"Points":[456,38],"Links":[9,8],"ID":178}

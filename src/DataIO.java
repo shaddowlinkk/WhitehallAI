@@ -45,15 +45,25 @@ public class DataIO {
             link.add(i);
         }
         node.put("Links",link);
-
     }
+
+    public void addLinks(int root,Integer[] links){
+        JSONArray link =new JSONArray();
+        JSONObject node = nodes.get(root-1);
+        node.remove("Links");
+        for (int i : links){
+            link.add(i);
+        }
+        node.put("Links",link);
+    }
+
     public ArrayList<Integer> getLinks(int selected){
         ArrayList<Integer> out = new ArrayList<Integer>();
         JSONObject node = nodes.get(selected-1);
         JSONArray links = (JSONArray) node.get("Links");
         if(links != null) {
             for (int i = 0; i < links.toArray().length; i++) {
-                out.add(((int)(long) links.toArray()[i]));
+                out.add((Integer.parseInt(""+links.toArray()[i])));
             }
         }
         return out;
@@ -69,8 +79,10 @@ public class DataIO {
         }
     }
     public String getJson(){
-        for(JSONObject o : nodes){
-            data= data+o.toJSONString()+"\n";
+        if (data.isEmpty()) {
+            for (JSONObject o : nodes) {
+                data = data + o.toJSONString() + "\n";
+            }
         }
         return data;
     }
@@ -82,7 +94,18 @@ public class DataIO {
         tpoint.add(p.y);
         node.put("Points",tpoint);
     }
+    public void setType(int index,int type){
+        JSONObject node =nodes.get(index-1);
+        node.remove("Type");
+        node.put("Type",type);
+    }
+    public void setID(int index,int id){
+        JSONObject node =nodes.get(index-1);
+        node.remove("ID");
+        node.put("ID",id);
+    }
     public int getID( int index){
+
         return (Integer) nodes.get(index).get("ID");
     }
     public int getType( int index){

@@ -8,6 +8,7 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
 public class EditBoard extends JPanel{
+
     private Image img = Toolkit.getDefaultToolkit().getImage("board.jpg");
     private int y;
     private int x;
@@ -20,6 +21,7 @@ public class EditBoard extends JPanel{
     private boolean imported = false;
     private boolean openE= false;
     private int selected,root;
+    private Point reset;
     private ArrayList<Integer> conections = new ArrayList<Integer>();
     private ArrayList<Integer> conn = new ArrayList<Integer>();
 
@@ -30,7 +32,7 @@ public class EditBoard extends JPanel{
 
             @Override
             /*
-            Used for selecting the node on the ghraph
+            Used for selecting the node on the graph
              */
             public void mouseClicked(MouseEvent e) {
                 /*
@@ -49,11 +51,9 @@ public class EditBoard extends JPanel{
                                 if (e.getY() - 30 <= pointsi.get(i - 1).y && e.getY() - 30 >= pointsi.get(i - 1).y - 11) {
                                     selected = i;
                                     if (openE) {
+                                        ed.setSelect(selected);
                                         ed.setList(SArray(data.getLinks(selected)));
-                                        if(data.getType(selected-1)==1){
-                                            ed.setID(data.getID(selected-1)-174);
-                                        }else
-                                            ed.setID(data.getID(selected-1));
+                                        ed.setID(data.getID(selected-1));
                                         ed.setType(data.getType(selected-1));
                                         ed.setVisible(true);
                                     }
@@ -66,11 +66,9 @@ public class EditBoard extends JPanel{
                                 if (e.getY() - 50 <= pointso.get(i - 1).y && e.getY() - 50 >= pointso.get(i - 1).y - 25) {
                                     selected = i + 174;
                                     if (openE) {
+                                        ed.setSelect(selected);
                                         ed.setList(SArray(data.getLinks(selected)));
-                                        if(data.getType(selected-1)==1){
-                                            ed.setID(data.getID(selected-1)-174);
-                                        }else
-                                            ed.setID(data.getID(selected-1));
+                                        ed.setID(data.getID(selected-1));
                                         ed.setType(data.getType(selected-1));
                                         ed.setVisible(true);
                                     }
@@ -84,11 +82,6 @@ public class EditBoard extends JPanel{
                 Click Events if moving a node with node editor
                  */
                 else {
-                    if(type==1) {
-                        data.setPoints(selected,pointso.get(selected-175));
-                    }else {
-                        data.setPoints(selected,pointsi.get(selected-1));
-                    }
                     ed.stopMove();
                 }
             }
@@ -97,14 +90,32 @@ public class EditBoard extends JPanel{
        f.addMouseMotionListener(new MouseMotionAdapter() {
            @Override
            public void mouseMoved(MouseEvent e) {
+               if(!ed.isVisible()&&!ed.getApply()&& reset!=null){
+                   if(type==1) {
+                       pointso.set(selected-175,reset);
+                       //data.setPoints(selected,pointso.get(selected-175));
+                   }else {
+                       pointsi.set(selected-1, reset);
+                       //data.setPoints(selected,pointsi.get(selected-1));
+                   }
+                   reset=null;
+                   repaint();
+               }else if(!ed.isVisible()&&ed.getApply()&& reset!=null){
+                   if(type==1) {
+                       data.setPoints(selected,pointso.get(selected-175));
+                   }else {
+                       data.setPoints(selected,pointsi.get(selected-1));
+                   }
+                   reset=null;
+                   repaint();
+               }
                if (ed.getMove()){
                    if(type==1) {
                        pointso.set(selected-175,new Point(e.getX() - 16, e.getY() - 34));
-                       repaint();
                    }else {
                        pointsi.set(selected-1, new Point(e.getX() - 8, e.getY() - 30));
-                       repaint();
                    }
+                   repaint();
                }
            }
        });
@@ -198,12 +209,17 @@ public class EditBoard extends JPanel{
                Enter: sets root nodes connections to data object
                  */
                 else if(e.getKeyCode()== KeyEvent.VK_1 && mode==2 && selected!=0){
+                    //TODO add ability to modify all data
                     openE=true;
+                    ed.setData(data);
+                    if(type==1) {
+                        reset=pointso.get(selected-175);
+                    }else {
+                        reset=pointsi.get(selected-1);
+                    }
+                    ed.setSelect(selected);
                     ed.setList(SArray(data.getLinks(selected)));
-                    if(data.getType(selected-1)==1){
-                        ed.setID(data.getID(selected-1)-174);
-                    }else
-                        ed.setID(data.getID(selected-1));
+                    ed.setID(data.getID(selected-1));
                     ed.setType(data.getType(selected-1));
                     ed.setVisible(true);
                 }else if (e.getKeyCode() == KeyEvent.VK_2 && mode ==2){

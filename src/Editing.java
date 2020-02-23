@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 /*
  * Created by JFormDesigner on Fri Feb 21 16:16:11 EST 2020
@@ -10,6 +11,7 @@ import javax.swing.*;
 /**
  * @author mac
  */
+// TODO workout saving bug
 public class Editing extends JFrame {
 	public Editing(DataIO _data) {
 		 data=_data;
@@ -22,17 +24,27 @@ public class Editing extends JFrame {
 	}
 
 	public void setID(int i){
+		apply=false;
 		id=i;
 		textField1.setText(Integer.toString(i));
 	}
+	public void setSelect(int s){
+		select=s;
 
+	}
 	public void setType(int t){
+		type=t;
 		textField2.setText(Integer.toString(t));
 	}
-
+	public void setData(DataIO d){
+		data=d;
+	}
 	public Boolean getMove(){
 		return Mclick;
 	}
+
+	public Boolean getApply(){return apply;}
+
 	public void stopMove(){
 		Mclick=false;
 	}
@@ -45,25 +57,34 @@ public class Editing extends JFrame {
 		// TODO add your code here
 	}
 
-	private void pointsItemStateChanged(ItemEvent e) {
-		// TODO add your code here
+	private void pointsItemStateChanged(ActionEvent e) {
+		Connections.getSelectedIndex();
 	}
-
-	private void OKActionPerformed(ActionEvent e) {
-		// TODO add your code here
+	private void addActionPerformed(ActionEvent e) {
+		Connections.addItem(Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID#:")));
 	}
-
+	private void delActionPerformed(ActionEvent e) {
+		Connections.removeItemAt(Connections.getSelectedIndex());
+	}
 	private void ApplyActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		apply=true;
+		int index=select;
+		data.setID(index,Integer.parseInt(textField1.getText()));
+		data.setType(index,Integer.parseInt(textField2.getText()));
+		ArrayList<Integer> links= new ArrayList<Integer>();
+		for (int i=0;i<Connections.getItemCount();i++){
+			links.add(Integer.parseInt( ""+Connections.getItemAt(i)));
+		}
+		data.addLinks(index,links);
+		setVisible(false);
 	}
 
 	private void MoveActionPerformed(ActionEvent e) {
 		Mclick=true;
-		// TODO add your code here
 	}
 
 	private void CalncelActionPerformed(ActionEvent e) {
-		// TODO add your code here
+		setVisible(false);
 	}
 
 	private void initComponents() {
@@ -123,13 +144,13 @@ public class Editing extends JFrame {
 			textField2.setBounds(50, 50, 180, 25);
 
 			//---- Connections ----
-			Connections.addItemListener(e -> pointsItemStateChanged(e));
+			Connections.addActionListener(e -> pointsItemStateChanged(e));
 			panel1.add(Connections);
 			Connections.setBounds(45, 80, 95, Connections.getPreferredSize().height);
 
 			//---- add ----
 			add.setText("Add");
-			add.addActionListener(e -> OKActionPerformed(e));
+			add.addActionListener(e -> addActionPerformed(e));
 			panel1.add(add);
 			add.setBounds(145, 80, 60, 25);
 
@@ -146,7 +167,7 @@ public class Editing extends JFrame {
 
 			//---- del ----
 			del.setText("Del");
-			del.addActionListener(e -> OKActionPerformed(e));
+			del.addActionListener(e -> delActionPerformed(e));
 			panel1.add(del);
 			del.setBounds(210, 80, 60, 25);
 
@@ -182,6 +203,8 @@ public class Editing extends JFrame {
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
+
+
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - mac
 	private JPanel panel1;
@@ -196,10 +219,12 @@ public class Editing extends JFrame {
 	private JButton del;
 	private JButton Move;
 	private JButton Calncel;
+	private int select;
 	private boolean Mclick;
 	private DataIO data;
 	private String[] list;
 	private int id;
 	private int type;
+	private  Boolean apply=false;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
