@@ -1,3 +1,5 @@
+package Editor;
+
 import javax.swing.*;
 
 public class EditWindow {

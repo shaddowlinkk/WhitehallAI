@@ -1,3 +1,7 @@
+package Editor;
+
+import Util.DataIO;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -61,7 +65,7 @@ public class Editing extends JFrame {
 		Connections.getSelectedIndex();
 	}
 	private void addActionPerformed(ActionEvent e) {
-		Connections.addItem(Integer.parseInt(JOptionPane.showInputDialog("Enter Node ID#:")));
+		Connections.addItem(Integer.parseInt(JOptionPane.showInputDialog("Enter MainRun.Node ID#:")));
 	}
 	private void delActionPerformed(ActionEvent e) {
 		Connections.removeItemAt(Connections.getSelectedIndex());

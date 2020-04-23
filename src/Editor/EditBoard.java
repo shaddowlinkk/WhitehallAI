@@ -1,9 +1,13 @@
+package Editor;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+
+import Util.DataIO;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
@@ -132,7 +136,7 @@ public class EditBoard extends JPanel{
                         pointso.add(new Point(x - 16, y - 34));
                         int ID = pointso.size()+174;
                         e.consume();
-                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+(pointso.size())+") Conections"));
+                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter MainRun.Node #("+(pointso.size())+") Conections"));
                         e.consume();
                         data.addData(ID, conn, type, x-16, y-34);
                         repaint();
@@ -141,7 +145,7 @@ public class EditBoard extends JPanel{
                         pointsi.add(new Point(x - 8, y - 30));
                         int ID =pointsi.size();
                         e.consume();
-                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter Node #("+pointsi.size()+") Conections"));
+                        int conn = Integer.parseInt(JOptionPane.showInputDialog("Enter MainRun.Node #("+pointsi.size()+") Conections"));
                         e.consume();
                         data.addData(ID, conn, type, x-8, y-30);
                         repaint();
@@ -167,7 +171,7 @@ public class EditBoard extends JPanel{
                         System.out.println("Failed to Write");
                     }
                 } else if (e.getKeyCode()==KeyEvent.VK_5 && !imported){
-                    //TODO MOVE THIS TO DataIO
+                    //TODO MOVE THIS TO Util.DataIO
                     System.out.println("importing data");
                     try{
                         FileReader read = new FileReader("Data.data");

@@ -1,3 +1,7 @@
+package MainRun;
+
+import Editor.EditBoard;
+
 import java.awt.*;
 import java.io.IOException;
 import javax.swing.*;

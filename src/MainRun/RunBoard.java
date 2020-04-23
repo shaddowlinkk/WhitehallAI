@@ -1,4 +1,6 @@
-import com.sun.deploy.net.MessageHeader;
+package MainRun;
+
+import Util.DataIO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,7 +15,7 @@ public class RunBoard extends JPanel {
      //TODO generate adjacency list
      private ArrayList<Point> pointso = new ArrayList<Point>();
      private ArrayList<Point> pointsi = new ArrayList<Point>();
-     private  DataIO data ;
+     private DataIO data ;
      private Image img = Toolkit.getDefaultToolkit().getImage("board.jpg");
      private boolean imported = false;
 
