@@ -8,7 +8,9 @@ import org.json.simple.parser.JSONParser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RunBoard extends JPanel {
@@ -46,6 +48,12 @@ public class RunBoard extends JPanel {
           }catch (Exception es){
                es.printStackTrace();
           }
+          try {
+               pathing p = new pathing(data);
+          }catch (IOException we){
+
+          }
+
      }
 
      public void paintComponent(Graphics g){
